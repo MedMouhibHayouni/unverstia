@@ -1,0 +1,30 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.States = void 0;
+var States;
+(function (States) {
+    States["TUNIS"] = "Tunis";
+    States["ARIANA"] = "Ariana";
+    States["MANOUBA"] = "Manouba";
+    States["BENAROUS"] = "Ben Arous";
+    States["NABEUL"] = "Nabeul";
+    States["ZAGHOUAN"] = "Zaghouan";
+    States["BEJA"] = "B\u00E9ja";
+    States["JENDOUBA"] = "Jendouba";
+    States["KASSERINE"] = "Kasserine";
+    States["KEF"] = "Kef";
+    States["SILIANA"] = "Siliana";
+    States["SOUSSE"] = "Sousse";
+    States["MONASTIR"] = "Monastir";
+    States["MAHDIA"] = "Mahdia";
+    States["SFAX"] = "Sfax";
+    States["KAIROUAN"] = "Kairouan";
+    States["SIDI_BOUZID"] = "Sidi Bouzid";
+    States["GAFSA"] = "Gafsa";
+    States["TOZEUR"] = "Tozeur";
+    States["KEBILI"] = "K\u00E9bili";
+    States["MEDENINE"] = "Medenine";
+    States["TATAOUINE"] = "Tataouine";
+    States["GABES"] = "Gab\u00E8s";
+})(States || (exports.States = States = {}));
+//# sourceMappingURL=States.enums.js.map
