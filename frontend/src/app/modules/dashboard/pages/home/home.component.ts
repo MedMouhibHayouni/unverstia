@@ -6,6 +6,20 @@ import { CdkDragDrop, moveItemInArray, transferArrayItem } from '@angular/cdk/dr
 import { AuthService } from '../../../../services/auth.service';
 import { PositionType, RoleType } from '../../../../core/enum/Role&PositionType.enum';
 
+interface Task {
+  title: string;
+  description: string;
+  priority: 'low' | 'medium' | 'high';
+  dueSoon?: boolean;
+  dueDate: string;
+  members: { avatar: string }[];
+}
+
+interface TaskColumn {
+  title: string;
+  status: 'pending' | 'in_progress' | 'completed';
+  tasks: Task[];
+}
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -26,23 +40,25 @@ export class HomeComponent implements OnInit, AfterViewInit {
   user: any;
   particles: any[] = [];
 
+
+
   // Task board data
-  taskColumns = [
-    {
-      title: 'En Attente',
-      status: 'pending',
-      tasks: [
-        {
-          title: 'Rapport hebdomadaire',
-          description: 'Soumettre le rapport de progression',
-          priority: 'high',
-          dueSoon: true,
-          dueDate: 'Aujourd\'hui',
-          members: [
-            { avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
-            { avatar: 'https://randomuser.me/api/portraits/men/32.jpg' }
-          ]
-        },
+  taskColumns: TaskColumn[] = [
+  {
+    title: 'En Attente',
+    status: 'pending',
+    tasks: [
+      {
+        title: 'Rapport hebdomadaire',
+        description: 'Soumettre le rapport de progression',
+        priority: 'high',
+        dueSoon: true,
+        dueDate: 'Aujourd\'hui',
+        members: [
+          { avatar: 'https://randomuser.me/api/portraits/women/44.jpg' },
+          { avatar: 'https://randomuser.me/api/portraits/men/32.jpg' }
+        ]
+      },
         {
           title: 'Réunion d\'équipe',
           description: 'Préparer l\'ordre du jour',
@@ -345,16 +361,20 @@ export class HomeComponent implements OnInit, AfterViewInit {
   }
 
   // Task board methods
-  drop(event: CdkDragDrop<string[]>) {
-    if (event.previousContainer === event.container) {
-      moveItemInArray(event.container.data, event.previousIndex, event.currentIndex);
-    } else {
-      transferArrayItem(
-        event.previousContainer.data,
-        event.container.data,
-        event.previousIndex,
-        event.currentIndex
-      );
-    }
+drop(event: CdkDragDrop<Task[]>) {
+  if (event.previousContainer === event.container) {
+    moveItemInArray(
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
+  } else {
+    transferArrayItem(
+      event.previousContainer.data,
+      event.container.data,
+      event.previousIndex,
+      event.currentIndex
+    );
   }
+}
 }

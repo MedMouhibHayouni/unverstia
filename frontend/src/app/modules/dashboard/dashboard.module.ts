@@ -25,6 +25,7 @@ import { TeacherListComponent } from './pages/admin/users/teacher-list/teacher-l
 import { DepartementsComponent } from './pages/admin/users/departements/departements.component';
 import { InstitutionsComponent } from './pages/admin/users/institutions/institutions.component';
 import { PfeModule } from '../pfe/pfe.module';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 
 
@@ -58,7 +59,8 @@ import { PfeModule } from '../pfe/pfe.module';
     FormsModule,
     ReactiveFormsModule,
     DashboardRoutingModule,
-    MatTooltipModule
+    MatTooltipModule,
+    DragDropModule
 
 
 
