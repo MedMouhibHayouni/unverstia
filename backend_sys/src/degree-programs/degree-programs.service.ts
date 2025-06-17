@@ -68,7 +68,7 @@ export class DegreeProgramsService {
     degreeProgram.name = createDegreeProgramDto.name;
     degreeProgram.code = createDegreeProgramDto.code;
     degreeProgram.level = createDegreeProgramDto.level;
-    degreeProgram.duration_years = createDegreeProgramDto.duration;
+    degreeProgram.duration_years = createDegreeProgramDto.duration_years;
     degreeProgram.description = createDegreeProgramDto.description;
     degreeProgram.major = major; // Use the actual Major entity
     degreeProgram.speciality = speciality; // Use the actual Speciality entity

@@ -17,63 +17,24 @@ const common_1 = require("@nestjs/common");
 const users_service_1 = require("./users.service");
 const create_user_dto_1 = require("./dto/create-user.dto");
 const update_user_dto_1 = require("./dto/update-user.dto");
-const user_reponse_dto_1 = require("./dto/user-reponse.dto");
-const class_transformer_1 = require("class-transformer");
 let UsersController = class UsersController {
     constructor(usersService) {
         this.usersService = usersService;
     }
     async create(createUserDto) {
-        try {
-            const user = await this.usersService.create(createUserDto);
-            return (0, class_transformer_1.plainToClass)(user_reponse_dto_1.UserResponseDto, user, {
-                excludeExtraneousValues: true,
-            });
-        }
-        catch (error) {
-            if (error instanceof common_1.ConflictException) {
-                throw error;
-            }
-            throw new common_1.BadRequestException(error.message || 'Invalid user data');
-        }
+        return this.usersService.create(createUserDto);
     }
     async findAll() {
-        const users = await this.usersService.findAll();
-        return users.map((user) => (0, class_transformer_1.plainToClass)(user_reponse_dto_1.UserResponseDto, user, { excludeExtraneousValues: true }));
+        return this.usersService.findAll();
     }
     async findOne(id) {
-        const user = await this.usersService.findOne(+id);
-        if (!user) {
-            throw new common_1.NotFoundException(`User with ID ${id} not found`);
-        }
-        return (0, class_transformer_1.plainToClass)(user_reponse_dto_1.UserResponseDto, user, {
-            excludeExtraneousValues: true,
-        });
+        return this.usersService.findOne(id);
     }
     async update(id, updateUserDto) {
-        try {
-            const user = await this.usersService.update(+id, updateUserDto);
-            return (0, class_transformer_1.plainToClass)(user_reponse_dto_1.UserResponseDto, user, {
-                excludeExtraneousValues: true,
-            });
-        }
-        catch (error) {
-            if (error instanceof common_1.NotFoundException ||
-                error instanceof common_1.ConflictException) {
-                throw error;
-            }
-            throw new common_1.BadRequestException(error.message || 'Invalid user data');
-        }
+        return this.usersService.update(id, updateUserDto);
     }
     async remove(id) {
-        const result = await this.usersService.remove(+id);
-        if (!result) {
-            throw new common_1.NotFoundException(`User with ID ${id} not found`);
-        }
-        return {
-            success: true,
-            message: `User with ID ${id} deleted successfully`,
-        };
+        return this.usersService.remove(id);
     }
 };
 exports.UsersController = UsersController;
@@ -94,7 +55,7 @@ __decorate([
     (0, common_1.Get)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "findOne", null);
 __decorate([
@@ -102,14 +63,14 @@ __decorate([
     __param(0, (0, common_1.Param)('id')),
     __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, update_user_dto_1.UpdateUserDto]),
+    __metadata("design:paramtypes", [Number, update_user_dto_1.UpdateUserDto]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(':id'),
     __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
+    __metadata("design:paramtypes", [Number]),
     __metadata("design:returntype", Promise)
 ], UsersController.prototype, "remove", null);
 exports.UsersController = UsersController = __decorate([

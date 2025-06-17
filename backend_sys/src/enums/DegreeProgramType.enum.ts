@@ -1,5 +1,5 @@
 export enum DegreeProgramType {
-  BACHELOR = 'Liscence',
+  BACHELOR = 'Licence',
   MASTER = 'Master',
   PHD = 'doctorat',
 }

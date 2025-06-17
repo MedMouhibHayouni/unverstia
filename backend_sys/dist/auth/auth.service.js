@@ -16,10 +16,13 @@ const users_service_1 = require("../users/users.service");
 const bcrypt = require("bcrypt");
 const auth_response_dto_1 = require("./dto/auth-response.dto");
 const class_transformer_1 = require("class-transformer");
+const teachers_service_1 = require("../teachers/teachers.service");
+const RoleType_enum_1 = require("../enums/RoleType.enum");
 let AuthService = class AuthService {
-    constructor(usersService, jwtService) {
+    constructor(usersService, jwtService, teachersService) {
         this.usersService = usersService;
         this.jwtService = jwtService;
+        this.teachersService = teachersService;
     }
     async validateUser(email, password) {
         const user = await this.usersService.findByEmail(email);
@@ -38,37 +41,44 @@ let AuthService = class AuthService {
     async login(loginDto) {
         const user = await this.validateUser(loginDto.email, loginDto.password);
         await this.usersService.updateLastLogin(user.id);
+        let position = undefined;
+        if (user.role === RoleType_enum_1.RoleType.TEACHER) {
+            const teacher = await this.teachersService.findOneByUserId(user.id);
+            position = teacher?.position;
+        }
         const payload = {
             sub: user.id,
             email: user.email,
             role: user.role,
+            position: position || null,
         };
-        const authResponse = (0, class_transformer_1.plainToClass)(auth_response_dto_1.AuthResponseDto, {
+        return (0, class_transformer_1.plainToClass)(auth_response_dto_1.AuthResponseDto, {
             ...user,
+            position,
             access_token: this.jwtService.sign(payload),
         }, { excludeExtraneousValues: true });
-        return authResponse;
     }
     async register(registerDto) {
-        try {
-            const user = await this.usersService.create(registerDto);
-            const payload = {
-                sub: user.id,
-                email: user.email,
-                role: user.role,
-            };
-            const authResponse = (0, class_transformer_1.plainToClass)(auth_response_dto_1.AuthResponseDto, {
-                ...user,
-                access_token: this.jwtService.sign(payload),
-            }, { excludeExtraneousValues: true });
-            return authResponse;
+        const user = await this.usersService.create(registerDto);
+        let position;
+        if (registerDto.role === RoleType_enum_1.RoleType.TEACHER && registerDto.position) {
+            await this.teachersService.create({
+                user_id: user.id,
+                position: registerDto.position,
+            });
+            position = registerDto.position;
         }
-        catch (error) {
-            if (error instanceof common_1.ConflictException) {
-                throw new common_1.ConflictException(error.message);
-            }
-            throw error;
-        }
+        const payload = {
+            sub: user.id,
+            email: user.email,
+            role: user.role,
+            position: position || null,
+        };
+        return (0, class_transformer_1.plainToClass)(auth_response_dto_1.AuthResponseDto, {
+            ...user,
+            position,
+            access_token: this.jwtService.sign(payload),
+        }, { excludeExtraneousValues: true });
     }
     async requestPasswordReset(email) {
         const token = await this.usersService.generateResetToken(email);
@@ -94,6 +104,7 @@ exports.AuthService = AuthService;
 exports.AuthService = AuthService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_1.UsersService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        teachers_service_1.TeachersService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

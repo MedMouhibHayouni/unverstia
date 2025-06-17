@@ -1,8 +1,4 @@
-import {
-  Injectable,
-  UnauthorizedException,
-  ConflictException,
-} from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
@@ -10,12 +6,16 @@ import { LoginDto } from './dto/login.dto';
 import { RegisterDto } from './dto/register.dto';
 import { AuthResponseDto } from './dto/auth-response.dto';
 import { plainToClass } from 'class-transformer';
+import { TeachersService } from 'src/teachers/teachers.service';
+import { PositionType } from 'src/enums/PositionType.enum';
+import { RoleType } from 'src/enums/RoleType.enum';
 
 @Injectable()
 export class AuthService {
   constructor(
     private usersService: UsersService,
     private jwtService: JwtService,
+    private teachersService: TeachersService,
   ) {}
 
   async validateUser(email: string, password: string): Promise<any> {
@@ -44,52 +44,64 @@ export class AuthService {
     const user = await this.validateUser(loginDto.email, loginDto.password);
     await this.usersService.updateLastLogin(user.id);
 
+    let position: PositionType | undefined = undefined;
+
+    if (user.role === RoleType.TEACHER) {
+      const teacher = await this.teachersService.findOneByUserId(user.id);
+      position = teacher?.position;
+    }
+
     const payload = {
       sub: user.id,
       email: user.email,
       role: user.role,
+      position: position || null, // 👈 Include position in token
     };
 
-    const authResponse = plainToClass(
+    return plainToClass(
       AuthResponseDto,
       {
         ...user,
+        position, // 👈 Also include in response DTO
         access_token: this.jwtService.sign(payload),
       },
       { excludeExtraneousValues: true },
     );
-
-    return authResponse;
   }
 
   async register(registerDto: RegisterDto): Promise<AuthResponseDto> {
-    try {
-      // Création de l'utilisateur via le service utilisateur
-      const user = await this.usersService.create(registerDto);
+    // Step 1: Create the user
+    const user = await this.usersService.create(registerDto);
 
-      // Génération du token JWT
-      const payload = {
-        sub: user.id,
-        email: user.email,
-        role: user.role,
-      };
+    let position: PositionType | undefined;
 
-      const authResponse = plainToClass(
-        AuthResponseDto,
-        {
-          ...user,
-          access_token: this.jwtService.sign(payload),
-        },
-        { excludeExtraneousValues: true },
-      );
-
-      return authResponse;
-    } catch (error) {
-      if (error instanceof ConflictException) {
-        throw new ConflictException(error.message);
-      }
-      throw error;
+    // Step 2: If user is a teacher and provided a position, create the Teacher entry
+    if (registerDto.role === RoleType.TEACHER && registerDto.position) {
+      await this.teachersService.create({
+        user_id: user.id,
+        position: registerDto.position,
+      });
+      position = registerDto.position;
     }
+
+    // Step 3: Build JWT payload with role + optional position
+    const payload = {
+      sub: user.id,
+      email: user.email,
+      role: user.role,
+      position: position || null,
+    };
+
+    // Step 4: Return response DTO with position
+    return plainToClass(
+      AuthResponseDto,
+      {
+        ...user,
+        position,
+        access_token: this.jwtService.sign(payload),
+      },
+      { excludeExtraneousValues: true },
+    );
   }
 
   async requestPasswordReset(email: string): Promise<{ message: string }> {

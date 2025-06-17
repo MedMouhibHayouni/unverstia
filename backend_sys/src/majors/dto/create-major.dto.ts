@@ -10,6 +10,6 @@ export class CreateMajorDto {
 
   @IsString()
   @IsOptional()
-  @Length(255)
+  @Length(10, 2000) // Adjust range as needed
   description: string;
 }

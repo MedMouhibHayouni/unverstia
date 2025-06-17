@@ -3,7 +3,6 @@ import {
   PrimaryGeneratedColumn,
   Column,
   OneToMany,
-  JoinColumn,
   ManyToOne,
 } from 'typeorm';
 import { Major } from '../../majors/entities/major.entity';

@@ -28,21 +28,17 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsEnum)(DegreeProgramType_enum_1.DegreeProgramType),
     __metadata("design:type", String)
-], CreateDegreeProgramDto.prototype, "degree_type", void 0);
+], CreateDegreeProgramDto.prototype, "level", void 0);
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.Length)(1, 255),
     __metadata("design:type", String)
 ], CreateDegreeProgramDto.prototype, "description", void 0);
 __decorate([
-    (0, class_validator_1.IsEnum)(DegreeProgramType_enum_1.DegreeProgramType),
-    __metadata("design:type", String)
-], CreateDegreeProgramDto.prototype, "level", void 0);
-__decorate([
     (0, class_validator_1.IsInt)(),
     (0, class_validator_1.IsPositive)(),
     __metadata("design:type", Number)
-], CreateDegreeProgramDto.prototype, "duration", void 0);
+], CreateDegreeProgramDto.prototype, "duration_years", void 0);
 __decorate([
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)

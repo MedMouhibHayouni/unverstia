@@ -17,6 +17,7 @@ const config_1 = require("@nestjs/config");
 const jwt_strategy_1 = require("./strategies/jwt.strategy");
 const typeorm_1 = require("@nestjs/typeorm");
 const user_entity_1 = require("../users/entities/user.entity");
+const teachers_module_1 = require("../teachers/teachers.module");
 let AuthModule = class AuthModule {
 };
 exports.AuthModule = AuthModule;
@@ -26,6 +27,7 @@ exports.AuthModule = AuthModule = __decorate([
             users_module_1.UsersModule,
             passport_1.PassportModule,
             typeorm_1.TypeOrmModule.forFeature([user_entity_1.User]),
+            teachers_module_1.TeachersModule,
             jwt_1.JwtModule.registerAsync({
                 imports: [config_1.ConfigModule],
                 useFactory: async (configService) => ({

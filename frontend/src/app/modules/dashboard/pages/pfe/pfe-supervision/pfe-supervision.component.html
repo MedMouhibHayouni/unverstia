@@ -1,0 +1,208 @@
+<div class="container mx-auto px-4 py-8">
+  <div class="flex flex-col md:flex-row md:items-center md:justify-between mb-8 gap-4">
+    <h1 class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+      Encadrement des PFE
+    </h1>
+
+    <div class="relative w-full md:w-64">
+      <div class="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+        <i class="fas fa-search text-gray-400"></i>
+      </div>
+      <input type="text" [(ngModel)]="searchQuery" (ngModelChange)="onSearchChange()" placeholder="Rechercher..."
+        class="block w-full pl-10 pr-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500">
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div class="flex border-b border-gray-200 dark:border-gray-700 mb-6">
+    <button (click)="onTabChange('active')" [class]="activeTab === 'active' ?
+      'px-4 py-2 font-medium text-sm border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 focus:outline-none' :
+      'px-4 py-2 font-medium text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none'">
+      Projets Actifs
+    </button>
+    <button (click)="onTabChange('completed')" [class]="activeTab === 'completed' ?
+      'px-4 py-2 font-medium text-sm border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 focus:outline-none' :
+      'px-4 py-2 font-medium text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none'">
+      Projets Terminés
+    </button>
+    <button (click)="onTabChange('all')" [class]="activeTab === 'all' ?
+      'px-4 py-2 font-medium text-sm border-b-2 border-indigo-500 text-indigo-600 dark:text-indigo-400 focus:outline-none' :
+      'px-4 py-2 font-medium text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 focus:outline-none'">
+      Tous les Projets
+    </button>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="space-y-4">
+    <div *ngFor="let _ of [1,2,3]" class="h-32 bg-gray-200 dark:bg-gray-700 rounded-lg animate-pulse"></div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredProjects.length === 0" class="text-center py-12">
+    <div class="mx-auto w-24 h-24 text-gray-400 mb-4">
+      <i class="fas fa-user-graduate text-6xl"></i>
+    </div>
+    <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">
+      {{ activeTab === 'active' ? 'Aucun projet actif' : activeTab === 'completed' ? 'Aucun projet terminé' : 'Aucun projet trouvé' }}
+    </h3>
+    <p class="text-gray-500 dark:text-gray-400">
+      {{ activeTab === 'active' ? 'Vous n\'avez pas de projets en cours d\'encadrement' :
+         activeTab === 'completed' ? 'Vous n\'avez pas encore encadré de projets' :
+         'Aucun projet ne correspond à votre recherche' }}
+    </p>
+  </div>
+
+  <!-- Projects List -->
+  <div *ngIf="!isLoading && filteredProjects.length > 0" class="grid gap-6">
+    <div *ngFor="let project of filteredProjects" class="project-card bg-white dark:bg-gray-800 rounded-xl shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+      <div class="p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">{{ project.title }}</h3>
+            <p class="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              <span class="font-medium">
+                {{ project.student?.user?.first_name || 'Prénom' }}
+                {{ project.student?.user?.last_name || 'Nom' }}
+              </span> •
+              {{ project.student?.degree?.name || 'Domaine non spécifié' }}
+              (Niveau {{ project.student?.level || 'non spécifié' }})
+            </p>
+            <div class="flex flex-wrap gap-2 mt-2">
+              <span class="px-2 py-1 text-xs rounded-full"
+                [ngClass]="{
+                  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300': project.status === PfeStatus.PENDING,
+                  'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300': project.status === PfeStatus.APPROVED,
+                  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300': project.status === PfeStatus.IN_PROGRESS,
+                  'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300': project.status === PfeStatus.COMPLETED,
+                  'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300': project.status === PfeStatus.DEFENDED
+                }">
+                {{ project.status || 'Statut inconnu' }}
+              </span>
+              <span *ngIf="project.supervisor" class="px-2 py-1 text-xs rounded-full bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300">
+                <i class="fas fa-building mr-1"></i> {{ project.supervisor }}
+              </span>
+            </div>
+          </div>
+          <div class="flex-shrink-0">
+            <img [src]="project.student?.user?.profile_picture || 'assets/images/default-avatar.png'"
+                 class="w-12 h-12 rounded-full object-cover border-2 border-white dark:border-gray-700 shadow-sm"
+                 alt="Photo de profil">
+          </div>
+        </div>
+
+        <div class="mt-4">
+          <p class="text-gray-700 dark:text-gray-300 mb-4">{{ project.description || 'Aucune description disponible' }}</p>
+
+          <div class="flex items-center justify-between text-sm text-gray-500 dark:text-gray-400">
+            <span *ngIf="project.submission_date">
+              <i class="fas fa-calendar-alt mr-1"></i>
+              {{ formatDate(project.submission_date)  }}
+            </span>
+            <span *ngIf="project.defense_date">
+              <i class="fas fa-microphone mr-1"></i>
+              Soutenance: {{ formatDate(project.defense_date)  }}
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-6 py-3 bg-gray-50 dark:bg-gray-700 border-t border-gray-200 dark:border-gray-600 flex justify-between items-center">
+        <div class="flex space-x-2">
+          <button (click)="openProjectDetails(project.id)"
+             class="px-3 py-1 text-sm bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-md hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors duration-200">
+            <i class="fas fa-eye mr-1"></i> Détails
+          </button>
+          <button *ngIf="project.status !== PfeStatus.DEFENDED"
+             class="px-3 py-1 text-sm bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300 border border-indigo-200 dark:border-indigo-800 rounded-md hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition-colors duration-200">
+            <i class="fas fa-edit mr-1"></i> Évaluer
+          </button>
+        </div>
+        <span *ngIf="project.submission_date" class="text-xs text-gray-500 dark:text-gray-400">
+          Dernière mise à jour: {{ formatDate(project.submission_date)  }}
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div *ngIf="showModal" class="fixed inset-0 z-50 overflow-y-auto">
+  <div class="flex items-center justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
+    <!-- Background overlay -->
+    <div class="fixed inset-0 transition-opacity" aria-hidden="true">
+      <div class="absolute inset-0 bg-gray-500 dark:bg-gray-900 opacity-75" (click)="closeModal()"></div>
+    </div>
+
+    <!-- Modal content -->
+    <div class="inline-block align-bottom bg-white dark:bg-gray-800 rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+      <div class="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
+        <div *ngIf="modalLoading" class="flex justify-center py-8">
+          <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-indigo-500"></div>
+        </div>
+
+        <div *ngIf="selectedProject && !modalLoading">
+          <div class="flex justify-between items-start">
+            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">{{ selectedProject.title }}</h3>
+            <button (click)="closeModal()" class="text-gray-400 hover:text-gray-500">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+
+          <div class="mt-4 space-y-4">
+            <div>
+              <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Étudiant</h4>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                {{ selectedProject.student?.user?.first_name || 'Prénom' }}
+                {{ selectedProject.student?.user?.last_name || 'Nom' }}
+              </p>
+            </div>
+
+            <div>
+              <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Description</h4>
+              <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                {{ selectedProject.description || 'Aucune description disponible' }}
+              </p>
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+              <div *ngIf="selectedProject.submission_date">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de soumission</h4>
+                <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                  {{ formatDate(selectedProject.submission_date) }}
+                </p>
+              </div>
+
+              <div *ngIf="selectedProject.defense_date">
+                <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Date de soutenance</h4>
+                <p class="mt-1 text-sm text-gray-900 dark:text-white">
+                  {{ formatDate(selectedProject.defense_date) }}
+                </p>
+              </div>
+            </div>
+
+            <div>
+              <h4 class="text-sm font-medium text-gray-500 dark:text-gray-400">Statut</h4>
+              <span class="mt-1 inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium"
+                [ngClass]="{
+                  'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-300': selectedProject.status === PfeStatus.PENDING,
+                  'bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-300': selectedProject.status === PfeStatus.APPROVED,
+                  'bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-300': selectedProject.status === PfeStatus.IN_PROGRESS,
+                  'bg-purple-100 text-purple-800 dark:bg-purple-900/30 dark:text-purple-300': selectedProject.status === PfeStatus.COMPLETED,
+                  'bg-indigo-100 text-indigo-800 dark:bg-indigo-900/30 dark:text-indigo-300': selectedProject.status === PfeStatus.DEFENDED
+                }">
+                {{ selectedProject.status || 'Statut inconnu' }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="px-4 py-3 bg-gray-50 dark:bg-gray-700 sm:px-6 sm:flex sm:flex-row-reverse">
+        <button type="button" (click)="closeModal()"
+          class="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-indigo-600 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm">
+          Fermer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

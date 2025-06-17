@@ -12,53 +12,45 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.RegisterDto = void 0;
 const class_validator_1 = require("class-validator");
 const RoleType_enum_1 = require("../../enums/RoleType.enum");
+const PositionType_enum_1 = require("../../enums/PositionType.enum");
 class RegisterDto {
 }
 exports.RegisterDto = RegisterDto;
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'Le prénom doit être une chaîne de caractères' }),
-    (0, class_validator_1.Length)(1, 50, {
-        message: 'Le prénom doit contenir entre 1 et 50 caractères',
-    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 50),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "first_name", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'Le nom doit être une chaîne de caractères' }),
-    (0, class_validator_1.Length)(1, 50, { message: 'Le nom doit contenir entre 1 et 50 caractères' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(1, 50),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "last_name", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'Le CIN doit être une chaîne de caractères' }),
-    (0, class_validator_1.Length)(8, 8, { message: 'Le CIN doit contenir exactement 8 caractères' }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(8, 8),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "cin", void 0);
 __decorate([
-    (0, class_validator_1.IsEmail)({}, { message: "L'email doit être une adresse email valide" }),
+    (0, class_validator_1.IsEmail)(),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "email", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'Le téléphone doit être une chaîne de caractères' }),
-    (0, class_validator_1.Length)(8, 20, {
-        message: 'Le téléphone doit contenir entre 8 et 20 caractères',
-    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(8, 20),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "phone", void 0);
 __decorate([
-    (0, class_validator_1.IsString)({ message: 'Le mot de passe doit être une chaîne de caractères' }),
-    (0, class_validator_1.Length)(6, 50, {
-        message: 'Le mot de passe doit contenir entre 6 et 50 caractères',
-    }),
+    (0, class_validator_1.IsString)(),
+    (0, class_validator_1.Length)(6, 50),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "password", void 0);
 __decorate([
-    (0, class_validator_1.IsEnum)(RoleType_enum_1.RoleType, { message: 'Le rôle doit être une valeur valide' }),
+    (0, class_validator_1.IsEnum)(RoleType_enum_1.RoleType),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "role", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsString)({
-        message: "L'URL de la photo de profil doit être une chaîne de caractères",
-    }),
     __metadata("design:type", String)
 ], RegisterDto.prototype, "profile_picture", void 0);
 __decorate([
@@ -67,7 +59,12 @@ __decorate([
 ], RegisterDto.prototype, "address_id", void 0);
 __decorate([
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsBoolean)({ message: 'Le statut actif doit être un booléen' }),
+    (0, class_validator_1.IsBoolean)(),
     __metadata("design:type", Boolean)
 ], RegisterDto.prototype, "is_active", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(PositionType_enum_1.PositionType),
+    __metadata("design:type", String)
+], RegisterDto.prototype, "position", void 0);
 //# sourceMappingURL=register.dto.js.map

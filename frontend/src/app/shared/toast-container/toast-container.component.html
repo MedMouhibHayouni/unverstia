@@ -1,0 +1,5 @@
+<!-- src/app/components/toast-container/toast-container.component.html -->
+
+<div class="fixed bottom-4 right-4 z-50 space-y-2">
+  <app-toast *ngFor="let toast of toastService.toasts$ | async" [toast]="toast"></app-toast>
+</div>

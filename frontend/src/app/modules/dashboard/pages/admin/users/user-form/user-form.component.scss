@@ -1,0 +1,77 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+// Custom animations
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+  }
+  50% {
+    transform: translateY(-20px) translateX(10px);
+  }
+}
+
+.animate-float-1 {
+  animation: float 8s ease-in-out infinite;
+}
+
+.animate-float-2 {
+  animation: float 10s ease-in-out infinite reverse;
+  animation-delay: 1s;
+}
+
+.animate-float-3 {
+  animation: float 12s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+// Form transitions
+.form-section {
+  transition: all 0.3s ease;
+}
+
+// Input focus effects
+input, select {
+  transition: all 0.3s ease;
+
+  &:focus {
+    box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.3);
+  }
+}
+
+// Dark mode transitions
+.dark {
+  .form-section {
+    background-color: rgba(31, 41, 55, 0.5);
+  }
+}
+
+// Button ripple effect
+.ripple {
+  position: relative;
+  overflow: hidden;
+
+  &:after {
+    content: "";
+    display: block;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    background-image: radial-gradient(circle, #fff 10%, transparent 10.01%);
+    background-repeat: no-repeat;
+    background-position: 50%;
+    transform: scale(10, 10);
+    opacity: 0;
+    transition: transform .5s, opacity 1s;
+  }
+
+  &:active:after {
+    transform: scale(0, 0);
+    opacity: 0.3;
+    transition: 0s;
+  }
+}

@@ -33,9 +33,6 @@ let DegreeProgramsController = class DegreeProgramsController {
         if (!createDegreeProgramDto.code) {
             throw new common_1.BadRequestException('Code is required');
         }
-        if (!createDegreeProgramDto.degree_type) {
-            throw new common_1.BadRequestException('Degree type is required');
-        }
         if (!createDegreeProgramDto.level) {
             throw new common_1.BadRequestException('Level is required');
         }

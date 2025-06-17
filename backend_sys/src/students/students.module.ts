@@ -10,6 +10,6 @@ import { DegreeProgram } from '../degree-programs/entities/degree-program.entity
   imports: [TypeOrmModule.forFeature([Student, User, DegreeProgram])],
   controllers: [StudentsController],
   providers: [StudentsService],
-  exports: [StudentsService], // If you need to use the service in other modules
+  exports: [StudentsService, TypeOrmModule], // If you need to use the service in other modules
 })
 export class StudentsModule {}

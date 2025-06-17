@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthResponseDto = void 0;
 const class_transformer_1 = require("class-transformer");
+const PositionType_enum_1 = require("../../enums/PositionType.enum");
 class AuthResponseDto {
 }
 exports.AuthResponseDto = AuthResponseDto;
@@ -38,4 +39,8 @@ __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], AuthResponseDto.prototype, "access_token", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String)
+], AuthResponseDto.prototype, "position", void 0);
 //# sourceMappingURL=auth-response.dto.js.map

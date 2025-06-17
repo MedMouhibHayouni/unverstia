@@ -1,11 +1,4 @@
-import {
-  IsString,
-  IsEnum,
-  Length,
-  IsInt,
-  IsPositive,
-  IsNumber,
-} from 'class-validator';
+import { IsString, IsEnum, Length, IsInt, IsPositive } from 'class-validator';
 import { SexType } from '../../enums/SexType.enum';
 import { LevelType } from '../../enums/LevelType.enum';
 

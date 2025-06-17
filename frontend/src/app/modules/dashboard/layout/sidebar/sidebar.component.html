@@ -1,0 +1,152 @@
+<aside
+  #sidebar
+  class="sidebar bg-gradient-to-b from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 shadow-xl z-20 transition-all duration-300"
+  [class.w-20]="isCompact"
+  [class.w-72]="!isCompact"
+>
+  <!-- Logo -->
+  <div class="logo-container px-4 py-6 flex items-center justify-between border-b border-gray-100 dark:border-gray-700">
+    <div
+      class="logo flex items-center transition-all duration-300 overflow-hidden"
+      [class.opacity-0]="isCompact"
+      [class.w-0]="isCompact"
+      [class.opacity-100]="!isCompact"
+      [class.w-auto]="!isCompact"
+    >
+      <i class="fas fa-graduation-cap text-2xl text-indigo-600 dark:text-indigo-400 mr-3"></i>
+      <span class="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600 dark:from-indigo-400 dark:to-purple-400">
+        PFE Platform
+      </span>
+    </div>
+    <button
+      class="sidebar-toggle p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+      (click)="toggleCompact()"
+    >
+      <i
+        class="fas text-indigo-600 dark:text-indigo-400 transition-transform duration-300"
+        [class.fa-chevron-left]="!isCompact"
+        [class.fa-chevron-right]="isCompact"
+      ></i>
+    </button>
+  </div>
+
+  <!-- Navigation -->
+  <nav class="sidebar-nav px-2 py-4 flex-1 overflow-y-auto custom-scrollbar">
+    <ul class="space-y-1">
+      <ng-container *ngFor="let item of sidebarItems; let i = index">
+        <li class="sidebar-item group relative rounded-lg transition-all duration-200"
+            [class.active]="isActive(item)"
+            [class.has-children]="item.children?.length"
+            >
+
+          <!-- Single Item -->
+          <a
+            *ngIf="!item.children?.length"
+            [routerLink]="item.route"
+            routerLinkActive="active"
+            class="sidebar-link flex items-center px-4 py-3 text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 transition-colors relative"
+          >
+            <div class="icon-container relative">
+              <i class="fas fa-{{item.icon}} text-lg w-6 text-center"
+                 [class.text-indigo-600]="isActive(item)"
+                 [class.dark:text-indigo-400]="isActive(item)"></i>
+              <span
+                class="active-indicator absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-600 dark:bg-indigo-400 rounded-r-full"
+                [class.opacity-0]="!isActive(item)"
+                [class.opacity-100]="isActive(item)"
+              ></span>
+            </div>
+            <span class="ml-3 font-medium" [class.opacity-0]="isCompact">{{ item.name }}</span>
+            <span *ngIf="(item.badge ?? 0) > 0"
+                  class="badge absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              {{ item.badge }}
+            </span>
+            <span class="tooltip absolute left-full ml-6 px-3 py-1 bg-gray-900 text-white text-sm rounded opacity-0 invisible group-hover:opacity-100 group-hover:visible">
+              {{ item.name }}
+            </span>
+          </a>
+
+          <!-- Parent Item -->
+          <div
+            *ngIf="item.children?.length"
+            class="parent-item flex items-center justify-between px-4 py-3 cursor-pointer text-gray-700 dark:text-gray-300 hover:text-indigo-600 dark:hover:text-indigo-400 relative"
+            (click)="toggleChildren(i)"
+          >
+            <div class="flex items-center">
+              <div class="icon-container relative">
+                <i class="fas fa-{{item.icon}} text-lg w-6 text-center"
+                   [class.text-indigo-600]="isActive(item)"
+                   [class.dark:text-indigo-400]="isActive(item)"></i>
+                <span class="active-indicator absolute -left-1 top-1/2 -translate-y-1/2 w-1 h-6 bg-indigo-600 dark:bg-indigo-400 rounded-r-full"
+                      [class.opacity-0]="!isActive(item)"
+                      [class.opacity-100]="isActive(item)"></span>
+              </div>
+              <span class="ml-3 font-medium" [class.opacity-0]="isCompact">{{ item.name }}</span>
+            </div>
+            <i class="fas fa-chevron-down text-xs transition-transform duration-200"
+               [class.rotate-180]="isExpanded(i)"
+               [class.opacity-0]="isCompact"></i>
+          </div>
+
+          <!-- Children Items -->
+          <ul *ngIf="item.children?.length"
+              class="children pl-4 transition-all duration-300 overflow-hidden"
+              [style.max-height]="isExpanded(i) ? ((item.children?.length || 0) * 48 + 'px') : '0'">
+            <li
+              *ngFor="let child of item.children"
+              class="child-item mt-1 rounded-lg transition-colors duration-200"
+            >
+              <a
+                [routerLink]="child.route"
+                routerLinkActive="active"
+                class="child-link flex items-center px-4 py-2 text-sm text-gray-600 dark:text-gray-400 hover:text-indigo-600 dark:hover:text-indigo-400 relative"
+              >
+                <span class="w-1 h-4 bg-indigo-600 dark:bg-indigo-400 rounded-r-full mr-3"
+                      [class.opacity-0]="!isActive(child)"
+                      [class.opacity-100]="isActive(child)"
+                      [class.mr-1]="child.icon"></span>
+                <i *ngIf="child.icon" class="fas fa-{{child.icon}} text-sm w-5 text-center mr-2"></i>
+                <span class="whitespace-nowrap" [class.opacity-0]="isCompact">{{ child.name }}</span>
+                <span *ngIf="(child.badge ?? 0) > 0"
+                      class="badge absolute right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                  {{ child.badge }}
+                </span>
+              </a>
+            </li>
+          </ul>
+        </li>
+      </ng-container>
+    </ul>
+  </nav>
+
+  <!-- User Footer -->
+  <div class="sidebar-footer px-4 py-4 border-t border-gray-100 dark:border-gray-700"
+       [class.opacity-0]="isCompact"
+       [class.h-0]="isCompact"
+       [class.overflow-hidden]="isCompact">
+    <div class="user-info flex items-center">
+      <div class="avatar relative">
+        <img
+          [src]="user?.profile_picture || 'assets/images/default-avatar.png'"
+          alt="User"
+          class="w-10 h-10 rounded-full object-cover border-2 border-indigo-100 dark:border-indigo-900"
+        >
+        <span
+          class="status-indicator absolute bottom-0 right-0 w-3 h-3 rounded-full border-2 border-white dark:border-gray-800"
+          [class.bg-green-500]="user?.status === 'active'"
+          [class.bg-yellow-500]="user?.status === 'away'"
+          [class.bg-red-500]="user?.status === 'offline'"
+        ></span>
+      </div>
+      <div class="user-details ml-3 overflow-hidden">
+        <div class="name text-sm font-medium text-gray-800 dark:text-gray-200 truncate">
+          {{ user?.first_name }} {{ user?.last_name }}
+        </div>
+        <div class="role text-xs text-indigo-600 dark:text-indigo-400 truncate">
+          {{ user?.role | titlecase }}
+          <span *ngIf="user?.position"> • {{ user.position | titlecase }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>

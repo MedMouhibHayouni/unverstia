@@ -1,3 +1,4 @@
+// register.dto.ts
 import {
   IsString,
   IsEmail,
@@ -7,50 +8,46 @@ import {
   IsBoolean,
 } from 'class-validator';
 import { RoleType } from '../../enums/RoleType.enum';
+import { PositionType } from '../../enums/PositionType.enum';
 
 export class RegisterDto {
-  @IsString({ message: 'Le prénom doit être une chaîne de caractères' })
-  @Length(1, 50, {
-    message: 'Le prénom doit contenir entre 1 et 50 caractères',
-  })
+  @IsString()
+  @Length(1, 50)
   first_name: string;
 
-  @IsString({ message: 'Le nom doit être une chaîne de caractères' })
-  @Length(1, 50, { message: 'Le nom doit contenir entre 1 et 50 caractères' })
+  @IsString()
+  @Length(1, 50)
   last_name: string;
 
-  @IsString({ message: 'Le CIN doit être une chaîne de caractères' })
-  @Length(8, 8, { message: 'Le CIN doit contenir exactement 8 caractères' })
+  @IsString()
+  @Length(8, 8)
   cin: string;
 
-  @IsEmail({}, { message: "L'email doit être une adresse email valide" })
+  @IsEmail()
   email: string;
 
-  @IsString({ message: 'Le téléphone doit être une chaîne de caractères' })
-  @Length(8, 20, {
-    message: 'Le téléphone doit contenir entre 8 et 20 caractères',
-  })
+  @IsString()
+  @Length(8, 20)
   phone: string;
 
-  @IsString({ message: 'Le mot de passe doit être une chaîne de caractères' })
-  @Length(6, 50, {
-    message: 'Le mot de passe doit contenir entre 6 et 50 caractères',
-  })
+  @IsString()
+  @Length(6, 50)
   password: string;
 
-  @IsEnum(RoleType, { message: 'Le rôle doit être une valeur valide' })
+  @IsEnum(RoleType)
   role: RoleType;
 
   @IsOptional()
-  @IsString({
-    message: "L'URL de la photo de profil doit être une chaîne de caractères",
-  })
   profile_picture?: string;
 
   @IsOptional()
   address_id?: number;
 
   @IsOptional()
-  @IsBoolean({ message: 'Le statut actif doit être un booléen' })
+  @IsBoolean()
   is_active?: boolean;
+
+  @IsOptional()
+  @IsEnum(PositionType)
+  position?: PositionType;
 }

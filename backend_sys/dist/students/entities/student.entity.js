@@ -15,6 +15,7 @@ const user_entity_1 = require("../../users/entities/user.entity");
 const SexType_enum_1 = require("../../enums/SexType.enum");
 const LevelType_enum_1 = require("../../enums/LevelType.enum");
 const degree_program_entity_1 = require("../../degree-programs/entities/degree-program.entity");
+const pfe_entity_1 = require("../../pfe/entities/pfe.entity");
 let Student = class Student {
 };
 exports.Student = Student;
@@ -44,6 +45,10 @@ __decorate([
     (0, typeorm_1.Column)({ type: 'enum', enum: LevelType_enum_1.LevelType }),
     __metadata("design:type", String)
 ], Student.prototype, "level", void 0);
+__decorate([
+    (0, typeorm_1.OneToMany)(() => pfe_entity_1.Pfe, (pfe) => pfe.student),
+    __metadata("design:type", Array)
+], Student.prototype, "pfes", void 0);
 exports.Student = Student = __decorate([
     (0, typeorm_1.Entity)('students')
 ], Student);

@@ -1,4 +1,5 @@
 import { Expose } from 'class-transformer';
+import { PositionType } from 'src/enums/PositionType.enum';
 
 export class AuthResponseDto {
   @Expose()
@@ -18,4 +19,7 @@ export class AuthResponseDto {
 
   @Expose()
   access_token: string;
+
+  @Expose()
+  position?: PositionType; // optional
 }

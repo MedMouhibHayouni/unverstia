@@ -26,7 +26,7 @@ __decorate([
 __decorate([
     (0, class_validator_1.IsString)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.Length)(255),
+    (0, class_validator_1.Length)(10, 2000),
     __metadata("design:type", String)
 ], CreateMajorDto.prototype, "description", void 0);
 //# sourceMappingURL=create-major.dto.js.map

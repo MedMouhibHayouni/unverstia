@@ -1,12 +1,11 @@
 import {
   IsString,
   IsEmail,
-  IsEnum,
   Length,
   IsOptional,
   IsBoolean,
 } from 'class-validator';
-import { RoleType } from '../../enums/RoleType.enum';
+import { PositionType } from 'src/enums/PositionType.enum';
 
 export class UserResponseDto {
   @IsOptional()
@@ -47,4 +46,7 @@ export class UserResponseDto {
   @IsOptional()
   @IsBoolean()
   is_active?: boolean;
+
+  @IsOptional()
+  position?: PositionType; // optional
 }

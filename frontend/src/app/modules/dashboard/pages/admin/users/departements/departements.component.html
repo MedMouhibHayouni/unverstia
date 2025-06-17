@@ -1,0 +1,210 @@
+<!-- src/app/components/admin/departments/departments.component.html -->
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Header -->
+  <div class="flex flex-col md:flex-row justify-between items-start md:items-center mb-8">
+    <h1 class="text-2xl md:text-3xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-indigo-600 to-purple-600">
+      Gestion des Départements
+    </h1>
+
+    <div class="flex flex-col sm:flex-row gap-4 mt-4 md:mt-0 w-full md:w-auto">
+      <div class="relative flex-grow">
+        <input
+          type="text"
+          [(ngModel)]="searchQuery"
+          (input)="searchDepartments()"
+          placeholder="Rechercher un département..."
+          class="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition-all"
+        >
+        <svg class="absolute left-3 top-2.5 h-5 w-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+        </svg>
+      </div>
+
+      <button
+        (click)="openCreateModal()"
+        class="flex items-center justify-center space-x-2 px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-700 hover:to-purple-700 text-white rounded-lg transition-all duration-200 shadow-sm hover:shadow-md"
+      >
+        <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+        </svg>
+        <span>Nouveau Département</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="flex justify-center items-center h-64">
+    <div class="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-purple-500"></div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!isLoading && filteredDepartments.length === 0" class="bg-white rounded-xl shadow-sm p-6 text-center">
+    <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+    </svg>
+    <h3 class="mt-2 text-lg font-medium text-gray-900">Aucun département trouvé</h3>
+    <p class="mt-1 text-gray-500">Commencez par créer un nouveau département</p>
+  </div>
+
+  <!-- Departments Grid -->
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+    <div
+      *ngFor="let dept of filteredDepartments"
+      [attr.data-dept-id]="dept.id"
+      class="department-card bg-white rounded-xl shadow-sm overflow-hidden border border-gray-200 hover:shadow-md transition-all duration-200"
+    >
+      <div class="p-6">
+        <div class="flex items-start justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900">{{ dept.name }}</h3>
+            <p class="mt-1 text-sm text-indigo-600 font-mono">{{ dept.code }}</p>
+          </div>
+          <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-indigo-100 text-indigo-800">
+            {{ dept.majorsCount || 0 }} filières
+          </span>
+        </div>
+
+        <div *ngIf="dept.academicInstitution" class="mt-4 flex items-center">
+          <div class="flex-shrink-0 h-10 w-10 rounded-full bg-indigo-100 flex items-center justify-center">
+            <svg class="h-6 w-6 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path>
+            </svg>
+          </div>
+          <div class="ml-3">
+            <p class="text-sm font-medium text-gray-900">{{ dept.academicInstitution.name }}</p>
+            <p class="text-sm text-gray-500">{{ dept.academicInstitution.university }}</p>
+          </div>
+        </div>
+
+        <div class="mt-6 flex justify-end space-x-2">
+          <button
+            class="px-3 py-1.5 text-sm font-medium text-indigo-600 hover:text-indigo-900 transition-colors"
+          >
+            Modifier
+          </button>
+          <button
+            (click)="openDeleteModal(dept)"
+            class="px-3 py-1.5 text-sm font-medium text-red-600 hover:text-red-900 transition-colors"
+          >
+            Supprimer
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Create Department Modal -->
+  <div *ngIf="showCreateModal" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="modal-entrance bg-white rounded-lg shadow-xl transform transition-all w-full max-w-md">
+        <div class="px-6 py-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-medium text-gray-900">
+              Créer un nouveau département
+            </h3>
+            <button (click)="closeCreateModal()" class="text-gray-400 hover:text-gray-500">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <form [formGroup]="departmentForm" (ngSubmit)="onSubmit()" class="mt-4 space-y-4">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700">Nom du département</label>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                placeholder="Ex: Informatique"
+              >
+              <div *ngIf="departmentForm.get('name')?.invalid && departmentForm.get('name')?.touched" class="mt-1 text-sm text-red-600">
+                Veuillez saisir un nom valide (max 50 caractères)
+              </div>
+            </div>
+
+            <div>
+              <label for="code" class="block text-sm font-medium text-gray-700">Code du département</label>
+              <input
+                type="text"
+                id="code"
+                formControlName="code"
+                class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                placeholder="Ex: INFO"
+              >
+              <div *ngIf="departmentForm.get('code')?.invalid && departmentForm.get('code')?.touched" class="mt-1 text-sm text-red-600">
+                Veuillez saisir un code valide (max 10 caractères)
+              </div>
+            </div>
+
+            <div class="pt-4 flex justify-end space-x-3">
+              <button
+                type="button"
+                (click)="closeCreateModal()"
+                class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+              >
+                Annuler
+              </button>
+              <button
+                type="submit"
+                [disabled]="departmentForm.invalid || isSubmitting"
+                class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-indigo-600 to-purple-600 rounded-md hover:from-indigo-700 hover:to-purple-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <span *ngIf="!isSubmitting">Créer</span>
+                <span *ngIf="isSubmitting">Création en cours...</span>
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Delete Confirmation Modal -->
+  <div *ngIf="showDeleteModal" class="fixed inset-0 z-50 overflow-y-auto">
+    <div class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+
+    <div class="flex items-center justify-center min-h-screen p-4">
+      <div class="modal-entrance bg-white rounded-lg shadow-xl transform transition-all w-full max-w-md">
+        <div class="px-6 py-4">
+          <div class="flex items-center justify-between">
+            <h3 class="text-lg font-medium text-gray-900">
+              Confirmer la suppression
+            </h3>
+            <button (click)="closeDeleteModal()" class="text-gray-400 hover:text-gray-500">
+              <svg class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+              </svg>
+            </button>
+          </div>
+
+          <div class="mt-4">
+            <p class="text-gray-600">
+              Êtes-vous sûr de vouloir supprimer le département <span class="font-semibold">{{ departmentToDelete?.name }}</span> ?
+              Cette action est irréversible.
+            </p>
+          </div>
+
+          <div class="mt-6 flex justify-end space-x-3">
+            <button
+              (click)="closeDeleteModal()"
+              class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-md hover:bg-gray-200 transition-colors"
+            >
+              Annuler
+            </button>
+            <button
+              (click)="confirmDelete()"
+              class="px-4 py-2 text-sm font-medium text-white bg-gradient-to-r from-red-600 to-pink-600 rounded-md hover:from-red-700 hover:to-pink-700 transition-colors"
+            >
+              Supprimer
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

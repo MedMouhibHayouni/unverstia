@@ -1,0 +1,62 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+
+.teacher-list-container {
+
+
+  @apply min-h-screen bg-gray-50;
+
+  .search-container {
+    input {
+      @apply transition-all duration-300;
+
+      &:focus {
+        @apply shadow-md;
+      }
+    }
+  }
+
+  .teacher-card {
+    @apply transition-all duration-300;
+
+    &:hover {
+      @apply shadow-lg border-indigo-100;
+    }
+  }
+
+  .stats-card {
+    @apply transition-all duration-300 hover:shadow-md hover:border-indigo-100;
+
+    &:hover {
+      transform: translateY(-2px);
+    }
+  }
+
+  .empty-state {
+    svg {
+      @apply opacity-0;
+    }
+
+    h3, p, button {
+      @apply opacity-0 transform translate-y-4;
+    }
+  }
+  /* Prévenir les scintillements pendant le chargement */
+.teacher-list-container {
+  &.loading {
+    .teacher-card,
+    .stats-card,
+    .filter-section,
+    .search-container {
+      display: none;
+    }
+
+    .loading-animation {
+      display: flex;
+    }
+  }
+}
+}
+
+

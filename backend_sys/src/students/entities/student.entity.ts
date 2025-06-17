@@ -5,11 +5,13 @@ import {
   OneToOne,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm';
 import { User } from '../../users/entities/user.entity';
 import { SexType } from '../../enums/SexType.enum';
 import { LevelType } from '../../enums/LevelType.enum';
 import { DegreeProgram } from '../../degree-programs/entities/degree-program.entity';
+import { Pfe } from 'src/pfe/entities/pfe.entity';
 @Entity('students')
 export class Student {
   @PrimaryColumn()
@@ -31,4 +33,7 @@ export class Student {
 
   @Column({ type: 'enum', enum: LevelType })
   level: LevelType;
+
+  @OneToMany(() => Pfe, (pfe) => pfe.student)
+  pfes: Pfe[];
 }

@@ -10,6 +10,15 @@ import { DepartmentsModule } from './departments/departments.module';
 import { UsersModule } from './users/users.module';
 import { StudentsModule } from './students/students.module';
 import { AuthModule } from './auth/auth.module';
+import { TeachersModule } from './teachers/teachers.module';
+import { IndustrialTutorsModule } from './industrial-tutors/industrial-tutors.module';
+import { PfeModule } from './pfe/pfe.module';
+import { InternshipsModule } from './internships/internships.module';
+import { DefensesModule } from './defenses/defenses.module';
+import { DocumentsModule } from './documents/documents.module';
+import { NotificationsModule } from './notifications/notifications.module';
+import { RolesModule } from './roles/roles.module';
+import { PositionsModule } from './positions/positions.module';
 
 @Module({
   imports: [
@@ -48,6 +57,15 @@ import { AuthModule } from './auth/auth.module';
     UsersModule,
     StudentsModule,
     AuthModule,
+    TeachersModule,
+    IndustrialTutorsModule,
+    PfeModule,
+    InternshipsModule,
+    DefensesModule,
+    DocumentsModule,
+    NotificationsModule,
+    RolesModule,
+    PositionsModule,
   ],
 })
 export class AppModule {}

@@ -19,6 +19,15 @@ const departments_module_1 = require("./departments/departments.module");
 const users_module_1 = require("./users/users.module");
 const students_module_1 = require("./students/students.module");
 const auth_module_1 = require("./auth/auth.module");
+const teachers_module_1 = require("./teachers/teachers.module");
+const industrial_tutors_module_1 = require("./industrial-tutors/industrial-tutors.module");
+const pfe_module_1 = require("./pfe/pfe.module");
+const internships_module_1 = require("./internships/internships.module");
+const defenses_module_1 = require("./defenses/defenses.module");
+const documents_module_1 = require("./documents/documents.module");
+const notifications_module_1 = require("./notifications/notifications.module");
+const roles_module_1 = require("./roles/roles.module");
+const positions_module_1 = require("./positions/positions.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -55,6 +64,15 @@ exports.AppModule = AppModule = __decorate([
             users_module_1.UsersModule,
             students_module_1.StudentsModule,
             auth_module_1.AuthModule,
+            teachers_module_1.TeachersModule,
+            industrial_tutors_module_1.IndustrialTutorsModule,
+            pfe_module_1.PfeModule,
+            internships_module_1.InternshipsModule,
+            defenses_module_1.DefensesModule,
+            documents_module_1.DocumentsModule,
+            notifications_module_1.NotificationsModule,
+            roles_module_1.RolesModule,
+            positions_module_1.PositionsModule,
         ],
     })
 ], AppModule);

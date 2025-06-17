@@ -31,9 +31,7 @@ export class DegreeProgramsController {
     if (!createDegreeProgramDto.code) {
       throw new BadRequestException('Code is required');
     }
-    if (!createDegreeProgramDto.degree_type) {
-      throw new BadRequestException('Degree type is required');
-    }
+
     if (!createDegreeProgramDto.level) {
       throw new BadRequestException('Level is required');
     }

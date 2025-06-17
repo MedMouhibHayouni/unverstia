@@ -1,3 +1,4 @@
+import { PositionType } from 'src/enums/PositionType.enum';
 export declare class AuthResponseDto {
     id: number;
     email: string;
@@ -5,4 +6,5 @@ export declare class AuthResponseDto {
     last_name: string;
     role: string;
     access_token: string;
+    position?: PositionType;
 }

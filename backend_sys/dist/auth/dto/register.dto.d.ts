@@ -1,4 +1,5 @@
 import { RoleType } from '../../enums/RoleType.enum';
+import { PositionType } from '../../enums/PositionType.enum';
 export declare class RegisterDto {
     first_name: string;
     last_name: string;
@@ -10,4 +11,5 @@ export declare class RegisterDto {
     profile_picture?: string;
     address_id?: number;
     is_active?: boolean;
+    position?: PositionType;
 }

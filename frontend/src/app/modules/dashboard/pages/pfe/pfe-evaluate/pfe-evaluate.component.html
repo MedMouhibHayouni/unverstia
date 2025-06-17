@@ -1,0 +1,35 @@
+<div class="container mx-auto py-10 px-4">
+  <h2 class="text-3xl font-bold mb-6 text-gray-800">Évaluer le PFE</h2>
+
+  <form (ngSubmit)="onSubmit()" #form="ngForm" class="bg-white shadow-md rounded-lg p-6 max-w-2xl mx-auto space-y-6">
+
+    <!-- Evaluation Type -->
+    <div class="space-y-2">
+      <label for="type" class="block text-sm font-medium text-gray-700">Type d'évaluation</label>
+      <select id="type" name="type" ngModel required
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-yellow-500">
+        <option *ngFor="let type of evaluationTypes">{{ type }}</option>
+      </select>
+    </div>
+
+    <!-- Score -->
+    <div class="space-y-2">
+      <label for="score" class="block text-sm font-medium text-gray-700">Score (0–100)</label>
+      <input id="score" name="score" ngModel required type="number" min="0" max="100"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500">
+    </div>
+
+    <!-- Feedback -->
+    <div class="space-y-2">
+      <label for="feedback" class="block text-sm font-medium text-gray-700">Commentaires</label>
+      <textarea id="feedback" name="feedback" ngModel required rows="4"
+        class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-purple-500"></textarea>
+    </div>
+
+    <!-- Submit Button -->
+    <button type="submit"
+      class="mt-4 w-full sm:w-auto px-6 py-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white font-semibold rounded-md hover:from-purple-700 hover:to-indigo-700 transition">
+      Soumettre l'évaluation
+    </button>
+  </form>
+</div>

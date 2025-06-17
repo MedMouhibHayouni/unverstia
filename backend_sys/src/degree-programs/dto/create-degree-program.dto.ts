@@ -18,18 +18,15 @@ export class CreateDegreeProgramDto {
   code: string;
 
   @IsEnum(DegreeProgramType)
-  degree_type: DegreeProgramType;
+  level: DegreeProgramType; // Matches entity field
 
   @IsString()
   @Length(1, 255)
   description: string;
 
-  @IsEnum(DegreeProgramType)
-  level: DegreeProgramType;
-
   @IsInt()
   @IsPositive()
-  duration: number;
+  duration_years: number; // Matches entity field
 
   @IsNumber()
   major_id: number;

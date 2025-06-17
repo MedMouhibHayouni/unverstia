@@ -16,6 +16,10 @@ class StudentDto {
 exports.StudentDto = StudentDto;
 __decorate([
     (0, class_transformer_1.Expose)(),
+    __metadata("design:type", Number)
+], StudentDto.prototype, "user_id", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], StudentDto.prototype, "first_name", void 0);
 __decorate([
@@ -25,13 +29,17 @@ __decorate([
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
-], StudentDto.prototype, "profile_picture", void 0);
-__decorate([
-    (0, class_transformer_1.Expose)(),
-    __metadata("design:type", String)
 ], StudentDto.prototype, "email", void 0);
 __decorate([
     (0, class_transformer_1.Expose)(),
     __metadata("design:type", String)
 ], StudentDto.prototype, "student_id", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String)
+], StudentDto.prototype, "level", void 0);
+__decorate([
+    (0, class_transformer_1.Expose)(),
+    __metadata("design:type", String)
+], StudentDto.prototype, "profile_picture", void 0);
 //# sourceMappingURL=student.dto.js.map

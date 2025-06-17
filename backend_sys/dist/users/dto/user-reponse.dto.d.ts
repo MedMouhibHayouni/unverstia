@@ -1,3 +1,4 @@
+import { PositionType } from 'src/enums/PositionType.enum';
 export declare class UserResponseDto {
     first_name?: string;
     last_name?: string;
@@ -8,4 +9,5 @@ export declare class UserResponseDto {
     profile_picture?: string;
     address_id?: number;
     is_active?: boolean;
+    position?: PositionType;
 }
